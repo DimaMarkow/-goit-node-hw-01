@@ -1,3 +1,5 @@
+const { program } = require("commander");
+
 const contacts = require("./contacts");
 
 const invokeAction = async ({ action, id, name, email, phone }) => {
@@ -11,9 +13,6 @@ const invokeAction = async ({ action, id, name, email, phone }) => {
     case "add":
       const newContact = await contacts.addContact({ name, email, phone });
       return console.log(newContact);
-    // case "updateById":
-    //   const updateBook = await contacts.updateById(id, { title, author });
-    //   return console.log(updateBook);
     case "remove":
       const deleteContact = await contacts.removeContact(id);
       return console.log(deleteContact);
@@ -22,23 +21,15 @@ const invokeAction = async ({ action, id, name, email, phone }) => {
   }
 };
 
-// const actionIndex = process.argv.indexOf("--action");
+program
+  .option("-a, --action <type>", "choose action")
+  .option("-i, --id <type>", "user id")
+  .option("-n, --name <type>", "user name")
+  .option("-e, --email <type>", "user email")
+  .option("-p, --phone <type>", "user phone");
 
-// if (actionIndex !== -1) {
-//   const action = process.argv[actionIndex + 1];
-//   invokeAction({ action });
-// }
+program.parse();
 
-// invokeAction({ action: "list" });
-// invokeAction({ action: "get", id: "drsAJ4SHPYqZeG-83QTVW" });
-// invokeAction({
-//   action: "add",
-//   name: "Worm",
-//   email: "worm@mail.com",
-//   phone: "123456789",
-// });
-// invokeAction({action: "updateById", id: "K3USWrLTkWWGcPpPFvL1X", title: "Ward", author: "John C. McCrae"})
-// invokeAction({
-//   action: "remove",
-//   id: "qdggE76Jtbfd9eWJHrssH",
-// });
+const argv = program.opts();
+
+invokeAction(argv);
